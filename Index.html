@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Catálogo Prefabricados DelSur</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --amarillo-logo:#FFD700;   /* nuevo color base */
+      --negro-texto:#000;
+      --cemento:#63666A;
+      -- terracota:#B45F4E;
+      --verde:#3E6F47;
+      --arena:#F9F9F9;
+      --blanco:#fff;
+      --cta:#E67E22;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Open Sans',sans-serif}
+    h1,h2,h3{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--negro-texto)}
+    header{background:var(--amarillo-logo);color:var(--negro-texto);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between}
+    header img{height:40px}
+    .hero{background:url("hero-obra.jpg") center/cover no-repeat;padding:6rem 1.5rem;text-align:center;color:var(--blanco)}
+    .hero h1{font-size:2.2rem;margin-bottom:.5rem;text-shadow:0 0 4px rgba(0,0,0,.6)}
+    .btn{background:var(--cta);color:var(--blanco);padding:.75rem 1.5rem;border:none;border-radius:4px;cursor:pointer;text-decoration:none;display:inline-block;margin-top:1rem}
+    .benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;padding:3rem 1.5rem;background:var(--arena)}
+    .benefits div{background:var(--blanco);padding:1.5rem;border-radius:6px;text-align:center}
+    .benefits img{height:48px;margin-bottom:.5rem}
+    .catalog{padding:3rem 1.5rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+    .card{border:1px solid #ddd;border-radius:6px;overflow:hidden;background:var(--blanco);display:flex;flex-direction:column}
+    .card img{width:100%;height:200px;object-fit:cover}
+    .card-body{padding:1rem;flex:1}
+    .card-body small{color:var(--cemento)}
+    .ficha{margin-top:1rem;font-size:.85rem;display:none}
+    .card.active .ficha{display:block}
+    .toggle{background:var(--verde);color:var(--blanco);border:none;padding:.4rem .8rem;border-radius:4px;cursor:pointer;margin-top:.5rem}
+    .cotiza-section{position:fixed;bottom:20px;right:20px;z-index:999}
+    .cotiza-box{background:var(--blanco);border:2px solid var(--cta);border-radius:8px;padding:1rem;width:260px;box-shadow:0 4px 10px rgba(0,0,0,.2);display:none}
+    .cotiza-box.show{display:block}
+    .cotiza-box select,.cotiza-box input{width:100%;margin:.5rem 0;padding:.5rem}
+    .whatsapp{width:100%;background:#25D366;color:var(--blanco);text-align:center;padding:.5rem;border-radius:4px;text-decoration:none;display:block;margin-top:.5rem}
+    footer{background:var(--negro-texto);color:var(--blanco);text-align:center;padding:2rem 1rem;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="41BC6ECA-0B62-4351-AD1C-FF24BE5FBC41.jpg" alt="Logo DelSur">
+    <button class="btn" onclick="toggleCotiza()">Cotiza aquí</button>
+  </header>
+
+  <section class="hero">
+    <h1>Sólidos que construyen el futuro</h1>
+    <p>Prefabricados de concreto para obra civil y urbanismo</p>
+  </section>
+
+  <section class="benefits">
+    <div><img src="https://img.icons8.com/dusk/64/000000/durable.png"><h3>Alta durabilidad</h3><p>≥ 25 MPa de resistencia</p></div>
+    <div><img src="https://img.icons8.com/dusk/64/000000/eco.png"><h3>Eco-amigable</h3><p>Concreto con árido reciclado</p></div>
+    <div><img src="https://img.icons8.com/dusk/64/000000/truck.png"><h3>Entrega inmediata</h3><p>Planta Sur – 48 h</p></div>
+    <div><img src="https://img.icons8.com/dusk/64/000000/design.png"><h3>Diseños versátiles</h3><p>Colores y texturas</p></div>
+  </section>
+
+  <section class="catalog">
+    <h2>Productos estrella</h2>
+    <div class="grid" id="catalogGrid"></div>
+  </section>
+
+  <div class="cotiza-section">
+    <div class="cotiza-box" id="cotBox">
+      <h3>Cotizador rápido</h3>
+      <select id="prodSelect"><option value="">--Selecciona producto--</option></select>
+      <input type="number" id="cant" placeholder="Cantidad (m² o und)">
+      <button class="btn" onclick="calcular()">Calcular</button>
+      <div id="res" style="margin-top:.8rem;font-size:.9rem"></div>
+      <a class="whatsapp" id="waLink" href="#" target="_blank">Enviar por WhatsApp</a>
+    </div>
+  </div>
+
+  <footer>
+    Concretos y Adoquines DelSur S.A.S. | Cra 8 # 22-45, Polínd. Sur | Tel. +57 322 457 3553 | ventas@delSur.com.co
+  </footer>
+
+  <script>
+    const productos = [
+      {cod:"AD-10-R",nom:"Adoquín Recto 10 cm",rend:50,peso:4.1,precio:0},
+      {cod:"BL-1540-E",nom:"Bloque 15×20×40 cm",rend:12.5,peso:17.5,precio:0},
+      {cod:"BA-40-TP",nom:"Baldosa 40×40 Textura Piedra",rend:6.25,peso:14,precio:0},
+      {cod:"FU-CAS-90",nom:"Fuente Cascade Ø90",rend:1,peso:210,precio:0},
+      {cod:"BU-SER-150",nom:"Banca Serena 1.5 m",rend:1,peso:168,precio:0}
+    ];
+    const catalogGrid = document.getElementById('catalogGrid');
+    const prodSelect = document.getElementById('prodSelect');
+    productos.forEach(p=>{
+      const opt = document.createElement('option');
+      opt.value = p.cod; opt.textContent = p.nom;
+      prodSelect.appendChild(opt);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="img/${p.cod}.jpg" alt="${p.nom}" onerror="this.src='https://via.placeholder.com/400x200?text=${p.nom}'">
+        <div class="card-body">
+          <h3>${p.nom}</h3><small>Código: ${p.cod}</small>
+          <button class="toggle" onclick="this.parentElement.parentElement.classList.toggle('active')">Ver ficha técnica</button>
+          <div class="ficha">
+            <strong>Resistencia:</strong> ≥ 25 MPa<br>
+            <strong>Peso unidad:</strong> ${p.peso} kg<br>
+            <strong>Rendimiento:</strong> ${p.rend} und/m²<br>
+            <strong>Colores:</strong> Gris, Terracota, Beige, Negro<br>
+            <strong>Entrega:</strong> 48 h – Polínd. Sur
+          </div>
+        </div>`;
+      catalogGrid.appendChild(card);
+    });
+    function toggleCotiza(){document.getElementById('cotBox').classList.toggle('show')}
+    function calcular(){
+      const sel = productos.find(x=>x.cod === prodSelect.value);
+      if(!sel){alert('Selecciona un producto');return}
+      const cant = parseFloat(document.getElementById('cant').value);
+      if(!cant){alert('Ingresa cantidad');return}
+      const und = sel.rend * cant;
+      const pesoTotal = (und * sel.peso / 1000).toFixed(2);
+      const texto = `Total piezas: ${und.toFixed(0)} und\nPeso aprox: ${pesoTotal} t\nPrecio unit: $${sel.precio||'Consultar'}`;
+      document.getElementById('res').innerText = texto;
+      const wa = `https://wa.me/573224573553?text=Hola,%20quiero%20cotizar%20${encodeURIComponent(sel.nom)}:%20${und.toFixed(0)}%20und (${cant}%20m²).`;
+      document.getElementById('waLink').href = wa;
+    }
+  </script>
+</body>
+</html>
+
+
